@@ -14,6 +14,8 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     public float radius;
 
+    public Animator anim;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -34,6 +36,15 @@ public class NewMonoBehaviourScript : MonoBehaviour
         if (isOnGround && Input.GetKeyDown(KeyCode.Space))
         {
             rb.linearVelocity = Vector2.up * firstJumpAmount;
+        }
+
+        if (isOnGround && inputMovement != 0)
+        {
+            anim.SetBool("isRunning", true);
+        }
+        else
+        {
+            anim.SetBool("isRunning", false);
         }
     }
 }

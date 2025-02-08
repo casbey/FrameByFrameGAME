@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 66f8c09307d898a47b682f0895bd297f
+guid: 4d07bc9edf8e48e40964a44320a91c58
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7326703089249104236
-    second: Timmy_idle_forward_00001_0
+      213: 174601740656035895
+    second: Timmy_idle_diagonal_00005_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Timmy_idle_forward_00001_0
+      name: Timmy_idle_diagonal_00005_0
       rect:
         serializedVersion: 2
         x: 447
         y: 122
-        width: 543
-        height: 489
+        width: 547
+        height: 483
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c61337124adada560800000000000000
-      internalID: 7326703089249104236
+      spriteID: 738c7f8ab5f4c6200800000000000000
+      internalID: 174601740656035895
       vertices: []
       indices: 
       edges: []
