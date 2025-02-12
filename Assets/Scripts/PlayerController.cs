@@ -1,19 +1,15 @@
+using System;
 using UnityEngine;
 
 public class NewMonoBehaviourScript : MonoBehaviour
 {
-    public float speed;
-    public float firstJumpAmount;
-    float inputMovement;
+    public float moveSpeed = 5f;
+    public float firstJumpAmount = 4f;
+    float horizontalInput;
+    bool isOnGround = false;
+    private bool isFacingRight = true;
 
     Rigidbody2D rb;
-
-    bool isOnGround;
-    public Transform groundCheck;
-    public LayerMask GroundMask;
-
-    public float radius;
-
     public Animator anim;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -22,29 +18,41 @@ public class NewMonoBehaviourScript : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    private void FixedUpdate()
-    {
-        isOnGround = Physics2D.OverlapCircle(groundCheck.position, radius, GroundMask);
-
-        inputMovement = Input.GetAxis("Horizontal");
-        rb.linearVelocity = new Vector2(inputMovement * speed, rb.linearVelocity.y);
-    }
-
     // Update is called once per frame
     void Update()
     {
-        if (isOnGround && Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.linearVelocity = Vector2.up * firstJumpAmount;
-        }
+        horizontalInput = Input.GetAxis("Horizontal");
 
-        if (isOnGround && inputMovement != 0)
+        FlipSprite();
+
+        if (Input.GetButtonDown("Jump") && isOnGround)
         {
-            anim.SetBool("isRunning", true);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, firstJumpAmount);
+            isOnGround = false;
+            anim.SetBool("isJumping", !isOnGround);
         }
-        else
+    }
+    private void FixedUpdate()
+    {
+        rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+        anim.SetFloat("xVelocity", Math.Abs(rb.linearVelocity.x));
+        anim.SetFloat("yVelocity",rb.linearVelocity.y);
+    }
+
+    void FlipSprite()
+    {
+        if (isFacingRight && horizontalInput < 0f || !isFacingRight && horizontalInput > 0f)
         {
-            anim.SetBool("isRunning", false);
-        }
+            isFacingRight = !isFacingRight;
+            Vector3 ls = transform.localScale;
+            ls.x *= -1f;
+            transform.localScale = ls;
+        } 
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        isOnGround = true;
+        anim.SetBool("isJumping", !isOnGround);
     }
 }
