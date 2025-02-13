@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     bool isFacingRight = true;
     public Animator animator;
     public BoxCollider2D playerCollider;
+    public PlayerShooting playerShooting;
 
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -172,6 +173,8 @@ public class PlayerMovement : MonoBehaviour
             Vector3 ls = transform.localScale;
             ls.x *= -1f;
             transform.localScale = ls;
+
+            playerShooting.Flip(isFacingRight);
         }
     }
     public void OnDrawGizmosSelected()
