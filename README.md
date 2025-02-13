@@ -1,1 +1,1 @@
-# Cuphead game goes BRRRR
+Cuphead game goes BRRRR
