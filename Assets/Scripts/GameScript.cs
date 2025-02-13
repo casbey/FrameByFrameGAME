@@ -1,0 +1,18 @@
+using UnityEngine;
+
+public class NewMonoBehaviourScript : MonoBehaviour
+{
+    public BoxCollider2D finishLine;
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            FinishLevel();
+        }
+    }
+    public void FinishLevel()
+    {
+       Debug.Log("Level Completed!");
+    }
+}

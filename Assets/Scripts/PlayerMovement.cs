@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
     bool isFacingRight = true;
     public Animator animator;
+    public BoxCollider2D playerCollider;
 
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -20,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheckPos;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.5f);
     public LayerMask groundLayer;
+    bool isOnPlatform;
 
     [Header("Gravity")]
     public float baseGravity = 2f;
@@ -73,6 +76,35 @@ public class PlayerMovement : MonoBehaviour
         {
             horizontalMovement = 0;
         }
+    }
+    
+    public void Descend(InputAction.CallbackContext context)
+    {
+        if (context.performed && isOnPlatform && playerCollider.enabled)
+        {
+            StartCoroutine(DisablePlayerCollider(0.50f));
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            isOnPlatform = true;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform"))
+        {
+            isOnPlatform = false;
+        }
+    }
+    private IEnumerator DisablePlayerCollider(float disableTime)
+    {
+        playerCollider.enabled = false;
+        yield return new WaitForSeconds(disableTime);
+        playerCollider.enabled = true;
     }
     public void Jump(InputAction.CallbackContext context)
     {
