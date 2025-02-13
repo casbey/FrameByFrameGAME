@@ -26,10 +26,24 @@ public class PlayerMovement : MonoBehaviour
     public float maxFallSpeed = 18f;
     public float fallSpeedMultiplier = 2f;
 
+    [Header("Crouching")]
+    public Collider2D standingCollider;
+    public Collider2D crouchingCollider;
+    bool isCrouching = false;
+
     // Update is called once per frame
     void Update()
     {
-        rb.linearVelocity = new Vector2(horizontalMovement * moveSpeed, rb.linearVelocity.y);
+        //Prevent movement while crouching
+        if (!isCrouching)
+        {
+            rb.linearVelocity = new Vector2(horizontalMovement * moveSpeed, rb.linearVelocity.y);
+        }
+        else
+        {
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y); //Stop horizontal movement
+        }
+        
         GroundCheck();
         Gravity();
         Flip();
@@ -50,12 +64,19 @@ public class PlayerMovement : MonoBehaviour
         }
     }
     public void Move(InputAction.CallbackContext context)
-    {
-        horizontalMovement = context.ReadValue<Vector2>().x;
+    {   
+        if (!isCrouching)
+        {
+            horizontalMovement = context.ReadValue<Vector2>().x;
+        }
+        else
+        {
+            horizontalMovement = 0;
+        }
     }
     public void Jump(InputAction.CallbackContext context)
     {
-        if (jumpsRemaining > 0)
+        if (jumpsRemaining > 0 && !isCrouching) //Prevent jumping while crouching
         {
             if (context.performed)
             {
@@ -73,7 +94,37 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+    public void Crouch(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            isCrouching = true;
+            animator.SetBool("crouching", true);
 
+            //Disable movement while crouching
+            horizontalMovement = 0;
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+
+            //Disable standing collider, enable crouching collider
+            if (standingCollider && crouchingCollider)
+            {
+                standingCollider.enabled = false;
+                crouchingCollider.enabled = true;
+            }
+        }
+        else if (context.canceled)
+        {
+            isCrouching = false;
+            animator.SetBool("crouching", false);
+
+            //Re-enable standing collider
+            if (standingCollider && crouchingCollider)
+            {
+                standingCollider.enabled = true;
+                crouchingCollider.enabled = false;
+            }
+        }
+    }
     private void GroundCheck()
     {
         if (Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer))
