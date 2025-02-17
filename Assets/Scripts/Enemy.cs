@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Enemy : MonoBehaviour
 {
@@ -6,6 +8,7 @@ public class Enemy : MonoBehaviour
     public int damage = 1;
     private int maxHealth = 3;
     private int health;
+    public Vector3 pos;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -14,11 +17,6 @@ public class Enemy : MonoBehaviour
         health = maxHealth;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
     public void TakeDamage(int damage)
     {
         health -= damage;

@@ -252,7 +252,7 @@ public class PlayerMovement : MonoBehaviour
         if (onGround || onPlatform)
         {
             jumpsRemaining = maxJumps; // Reset jumps when touching ground or platform
-            Debug.Log("Jumps Reset: Player is on Ground or Platform");
+            
         }
 
     }

@@ -5,9 +5,11 @@ public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 3;
     private int currentHealth;
-    private Color originalColor;
 
     public SpriteRenderer spriteRenderer;
+    private Rigidbody2D rb;
+    private CameraShake cameraShake;
+
 
     public Animator animator;
 
@@ -15,12 +17,14 @@ public class PlayerHealth : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
-        originalColor = spriteRenderer.color;
+        rb = GetComponent<Rigidbody2D>();
+        cameraShake = FindFirstObjectByType<CameraShake>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         Enemy enemy = collision.GetComponent<Enemy>();
+
         if (enemy)
         {
             animator.SetTrigger("damage");
@@ -32,18 +36,20 @@ public class PlayerHealth : MonoBehaviour
     {
         currentHealth -= damage;
 
-        StartCoroutine(FlashWhite());
-
         if (currentHealth <= 0)
         {
             //GAME OVER
         }
+
+        // Trigger Camera Shake
+        if (cameraShake != null)
+        {
+            cameraShake.ShakeCamera();
+        }
+        else
+        {
+            Debug.LogWarning("No CameraShake script found in the scene!");
+        }
     }
 
-    private IEnumerator FlashWhite()
-    {
-        spriteRenderer.color = Color.white;
-        yield return new WaitForSeconds(0.2f);
-        spriteRenderer.color = originalColor;
-    }
 }
