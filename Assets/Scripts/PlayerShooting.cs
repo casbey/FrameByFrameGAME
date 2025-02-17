@@ -10,11 +10,20 @@ public class PlayerShooting : MonoBehaviour
 
     private bool isFacingRight = true;
 
+    public GameObject waterEffect;  // Assign Water Effect GameObject in Unity
+    private Animator waterAnimator; // Animator for the water effect
+
     private PlayerMovement playerMovement;
     private CircleCollider2D hitboxCollider;
 
     void Start()
     {
+        if (waterEffect != null)
+        {
+            waterAnimator = waterEffect.GetComponent<Animator>();
+            waterEffect.SetActive(false); // Keep hidden until shooting
+        }
+
         playerMovement = GetComponent<PlayerMovement>();  // Get PlayerMovement reference
 
         if (jumpAttackHitbox)
@@ -27,6 +36,10 @@ public class PlayerShooting : MonoBehaviour
     public void Shoot()
     {
         if (!playerMovement) return;
+
+        waterEffect.SetActive(true); // Show water effect
+        waterAnimator.SetTrigger("fire"); // Play animation
+        Invoke("HideWaterEffect", 0.3f); // Hide after animation
 
         // Determine shooting direction
         Vector2 shootDirection = playerMovement.isLocked ? playerMovement.aimDirection :
@@ -68,7 +81,13 @@ public class PlayerShooting : MonoBehaviour
             Debug.Log("Jump Melee Attack Disabled!");
         }
     }
-
+    private void HideWaterEffect()
+    {
+        if (waterEffect != null)
+        {
+            waterEffect.SetActive(false);
+        }
+    }
     public void Flip(bool facingRight)
     {
         isFacingRight = facingRight;
