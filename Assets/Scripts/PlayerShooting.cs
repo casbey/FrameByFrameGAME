@@ -42,6 +42,9 @@ public class PlayerShooting : MonoBehaviour
         // Rotate bullet to match direction
         float angle = Mathf.Atan2(shootDirection.y, shootDirection.x) * Mathf.Rad2Deg;
         bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        // Destroy the bullet after 3 seconds
+        Destroy(bullet, 3f);
     }
     public void JumpAttack()
     {

@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform groundCheckPos;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.5f);
     public LayerMask groundLayer;
+    public LayerMask platformLayer;
     bool isOnPlatform;
 
     [Header("Gravity")]
@@ -124,6 +125,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Platform"))
         {
             isOnPlatform = true;
+            jumpsRemaining = maxJumps;
         }
     }
 
@@ -244,10 +246,15 @@ public class PlayerMovement : MonoBehaviour
     }
     private void GroundCheck()
     {
-        if (Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer))
+        bool onGround = Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer);
+        bool onPlatform = Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, platformLayer);
+
+        if (onGround || onPlatform)
         {
-            jumpsRemaining = maxJumps;
+            jumpsRemaining = maxJumps; // Reset jumps when touching ground or platform
+            Debug.Log("Jumps Reset: Player is on Ground or Platform");
         }
+
     }
     public void Flip()
     {
