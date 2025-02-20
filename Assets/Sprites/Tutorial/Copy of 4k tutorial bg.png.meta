@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 6fea64496b3f60748a7586e187a59087
+guid: bf03bd1b35aa3e94588ca44a5c3d84d7
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7326703089249104236
-    second: Timmy_idle_forward_00001_0
+      213: 7918055378428016460
+    second: Copy of 4k tutorial bg_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,23 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Timmy_idle_forward_00001_0
+      name: Copy of 4k tutorial bg_0
       rect:
         serializedVersion: 2
-        x: 447
-        y: 122
-        width: 543
-        height: 489
+        x: 0
+        y: 0
+        width: 6418
+        height: 1753
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c61337124adada560800000000000000
-      internalID: 7326703089249104236
+      spriteID: c47b21f3a6592ed60800000000000000
+      internalID: 7918055378428016460
       vertices: []
       indices: 
       edges: []
@@ -138,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: e1efac33dab7af241adc2e475bbb95f0
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -147,8 +147,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      Timmy_idle_forward_00001_0: 7326703089249104236
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
