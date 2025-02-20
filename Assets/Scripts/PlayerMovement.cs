@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     public float moveSpeed = 5f;
-    float horizontalMovement;
+    public float horizontalMovement;
 
     [Header("Lock & Aim")]
     public bool isLocked = false;               // Lock mode state
@@ -24,13 +24,16 @@ public class PlayerMovement : MonoBehaviour
     public float jumpPower = 10f;
     public int maxJumps = 2;
     int jumpsRemaining;
+    private bool hasJumpAttacked = false; // Tracks if jump attack was used
 
     [Header("GroundCheck")]
     public Transform groundCheckPos;
     public Vector2 groundCheckSize = new Vector2(0.5f, 0.5f);
     public LayerMask groundLayer;
     public LayerMask platformLayer;
+    public LayerMask obsticleLayer;
     bool isOnPlatform;
+    bool canShoot;
 
     [Header("Gravity")]
     public float baseGravity = 2f;
@@ -40,7 +43,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Crouching")]
     public Collider2D standingCollider;
     public Collider2D crouchingCollider;
-    bool isCrouching = false;
+    public bool isCrouching = false;
 
     // Update is called once per frame
     void Update()
@@ -89,12 +92,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (context.performed && playerShooting != null)
         {
-            if (!IsGrounded()) // Player is in mid-air (Jump Attack)
+            if (!IsGrounded() && !canShoot && !hasJumpAttacked) // Player is in mid-air (Jump Attack)
             {
                 playerShooting.JumpAttack();
-                animator.SetTrigger("jumpAttack"); // Play Jump Attack Animation
+                hasJumpAttacked = true;
             }
-            else // Normal Shooting on the Ground
+            else if (IsGrounded() && canShoot && !hasJumpAttacked)// Normal Shooting on the Ground
             {
                 playerShooting.Shoot();
             }
@@ -102,7 +105,8 @@ public class PlayerMovement : MonoBehaviour
     }
     // Movement input; only update if not crouching and not locked.
     public void Move(InputAction.CallbackContext context)
-    {   
+    {
+
         if (!isCrouching)
         {
             horizontalMovement = context.ReadValue<Vector2>().x;
@@ -117,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (context.performed && isOnPlatform && playerCollider.enabled)
         {
-            StartCoroutine(DisablePlayerCollider(0.50f));
+            StartCoroutine(DisablePlayerCollider(0.35f));
         }
     }
     private void OnCollisionEnter2D(Collision2D collision)
@@ -125,6 +129,10 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Platform"))
         {
             isOnPlatform = true;
+            jumpsRemaining = maxJumps;
+        }
+        if (collision.gameObject.CompareTag("Obsticle"))
+        {
             jumpsRemaining = maxJumps;
         }
     }
@@ -221,24 +229,20 @@ public class PlayerMovement : MonoBehaviour
             if (y > 0 && input.x == 0) // W Pressed (Straight Up)
             {
                 aimDirection = Vector2.up;
-            }
-            else if (y < 0 && input.x == 0) // S Pressed (Straight Down)
-            {
-                aimDirection = Vector2.down;
+                animator.SetInteger("aimDirectionAnim", 1);
             }
             else if (y > 0 && input.x != 0) // W + A/D (Diagonal Up)
             {
                 aimDirection = new Vector2(x, 1).normalized;
-            }
-            else if (y < 0 && input.x != 0) // S + A/D (Diagonal Down)
-            {
-                aimDirection = new Vector2(x, -1).normalized;
+                animator.SetInteger("aimDirectionAnim", 2);
             }
             else // No vertical input, aim horizontally
             {
                 aimDirection = new Vector2(x, 0);
+                animator.SetInteger("aimDirectionAnim", 0);
             }
         }
+        
     }
     private bool IsGrounded()
     {
@@ -248,11 +252,17 @@ public class PlayerMovement : MonoBehaviour
     {
         bool onGround = Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, groundLayer);
         bool onPlatform = Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, platformLayer);
+        bool onObsticle = Physics2D.OverlapBox(groundCheckPos.position, groundCheckSize, 0, obsticleLayer);
 
-        if (onGround || onPlatform)
+        if (onGround || onPlatform || onObsticle)
         {
-            jumpsRemaining = maxJumps; // Reset jumps when touching ground or platform
-            
+            jumpsRemaining = maxJumps; // Reset jumps when touching ground or platform or an obsticle
+            canShoot = true;
+            hasJumpAttacked = false;
+        }
+        else
+        {
+            canShoot = false;
         }
 
     }
@@ -261,9 +271,10 @@ public class PlayerMovement : MonoBehaviour
         if(isFacingRight && horizontalMovement < 0 || (!isFacingRight && horizontalMovement > 0))
         {
             isFacingRight = !isFacingRight;
+
             Vector3 ls = transform.localScale;
             ls.x *= -1f;
-            transform.localScale = ls;
+            transform.localScale = ls; 
 
             playerShooting.Flip(isFacingRight);
 
