@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: 31f8b61125f14b24f9592e15f0fd32d3
+guid: 128ac4b5c1973294f80bd50e05369383
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3497037268685321506
-    second: Main_character_projectile-4_0
-  - first:
-      213: -3631940723839883931
-    second: Main_character_projectile-4_1
-  - first:
-      213: -2142703566513747224
-    second: Main_character_projectile-4_2
-  - first:
-      213: 4762194749545426958
-    second: Main_character_projectile-4_3
+      213: 6346972773930882293
+    second: Main_character_crouch_lower_idle_00006_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -122,89 +113,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Main_character_projectile-4_0
+      name: Main_character_crouch_lower_idle_00006_0
       rect:
         serializedVersion: 2
-        x: 426
-        y: 1178
-        width: 59
-        height: 61
+        x: 386
+        y: 126
+        width: 562
+        height: 335
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2257a462ed8f78030800000000000000
-      internalID: 3497037268685321506
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Main_character_projectile-4_1
-      rect:
-        serializedVersion: 2
-        x: 466
-        y: 492
-        width: 1085
-        height: 1016
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 565af3e8721c89dc0800000000000000
-      internalID: -3631940723839883931
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Main_character_projectile-4_2
-      rect:
-        serializedVersion: 2
-        x: 332
-        y: 969
-        width: 85
-        height: 124
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 8ea4cf275769342e0800000000000000
-      internalID: -2142703566513747224
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Main_character_projectile-4_3
-      rect:
-        serializedVersion: 2
-        x: 471
-        y: 925
-        width: 8
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e00b2edb4e6b61240800000000000000
-      internalID: 4762194749545426958
+      spriteID: 5f4d9353c1af41850800000000000000
+      internalID: 6346972773930882293
       vertices: []
       indices: 
       edges: []
@@ -213,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 644ed9ce44a8fa4408e4d49f0a62371b
     internalID: 0
     vertices: []
     indices: 
@@ -223,10 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Main_character_projectile-4_0: 3497037268685321506
-      Main_character_projectile-4_1: -3631940723839883931
-      Main_character_projectile-4_2: -2142703566513747224
-      Main_character_projectile-4_3: 4762194749545426958
+      Main_character_crouch_lower_idle_00006_0: 6346972773930882293
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

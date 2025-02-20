@@ -91,7 +91,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -513,7 +513,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -522,7 +522,23 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Main_character_projectile-3_0: 3060456781935799677
+      Main_character_projectile-3_1: 342732649716795709
+      Main_character_projectile-3_10: -8474268750029149729
+      Main_character_projectile-3_11: 1857656644938517203
+      Main_character_projectile-3_12: 2918693824363807972
+      Main_character_projectile-3_13: -939110727766645704
+      Main_character_projectile-3_14: -8271137925612838469
+      Main_character_projectile-3_15: -7199815968752464719
+      Main_character_projectile-3_2: -2144793521933807045
+      Main_character_projectile-3_3: -7411176569640581817
+      Main_character_projectile-3_4: 4876860083392162424
+      Main_character_projectile-3_5: 3413569675105822275
+      Main_character_projectile-3_6: 3100054465060765853
+      Main_character_projectile-3_7: -567010269102245973
+      Main_character_projectile-3_8: 6838224797484087960
+      Main_character_projectile-3_9: -5018751169240949632
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

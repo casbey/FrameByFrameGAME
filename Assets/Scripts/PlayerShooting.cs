@@ -16,6 +16,14 @@ public class PlayerShooting : MonoBehaviour
     private PlayerMovement playerMovement;
     private CircleCollider2D hitboxCollider;
 
+    public float offsetForCrouch = 0.5f;
+
+    // FirePoint Offsets
+    private Vector3 standingOffset = new Vector3(2.05f, 1.05f, 0f);
+    private Vector3 upShootingOffset = new Vector3(-1.85f, 2.46f, 0f);
+    private Vector3 diagonalShootingOffset = new Vector3(-0.1f, 1.5f, 0f);
+    private Vector3 crouchingFirePointOffset = new Vector3(1.25f, -1.2f, 0f); // Adjust for crouching
+
     void Start()
     {
         if (waterEffect != null)
@@ -32,18 +40,60 @@ public class PlayerShooting : MonoBehaviour
             jumpAttackHitbox.SetActive(false); // Ensure it's disabled at start
         }
     }
+    void Update()
+    {
+        UpdateFirePointPosition();
+    }
+
+    void UpdateFirePointPosition()
+    {
+        if (firePoint == null || playerMovement == null) return;
+
+        Vector3 offset = standingOffset; // Default standing position
+
+        if (playerMovement.isCrouching)
+        {
+            offset += crouchingFirePointOffset; // Apply crouch offset
+        }
+
+        // Apply offsets based on aim direction
+        if (playerMovement.aimDirection == Vector2.up)
+        {
+            offset += upShootingOffset; // Apply up-aiming offset
+        }
+        else if (playerMovement.aimDirection == new Vector2(1, 1).normalized ||
+                 playerMovement.aimDirection == new Vector2(-1, 1).normalized)
+        {
+            offset += diagonalShootingOffset; // Apply diagonal-aiming offset
+        }
+
+        // Apply calculated offset to FirePoint
+        firePoint.localPosition = offset;
+    }
 
     public void Shoot()
     {
         if (!playerMovement) return;
 
-        waterEffect.SetActive(true); // Show water effect
-        waterAnimator.SetTrigger("fire"); // Play animation
-        Invoke("HideWaterEffect", 0.3f); // Hide after animation
-
         // Determine shooting direction
         Vector2 shootDirection = playerMovement.isLocked ? playerMovement.aimDirection :
                                   (playerMovement.isFacingRight ? Vector2.right : Vector2.left);
+
+        // Only activate WaterEffect if NOT shooting up
+        if (waterEffect != null)
+        {
+            if (playerMovement.aimDirection != Vector2.up && (playerMovement.horizontalMovement == 0 || playerMovement.isLocked)) // Check if not aiming up
+            {
+                waterEffect.transform.position = firePoint.position; // Match FirePoint position
+                waterEffect.SetActive(true); // Show WaterEffect
+                waterAnimator.SetTrigger("fire"); // Play animation
+                Invoke("HideWaterEffect", 0.3f); // Hide after animation
+            }
+            else
+            {
+                waterEffect.SetActive(false); // Ensure it's off when shooting up
+            }
+        }
 
         // Create bullet
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);

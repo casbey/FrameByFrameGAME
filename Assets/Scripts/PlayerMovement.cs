@@ -12,7 +12,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     public float moveSpeed = 5f;
-    float horizontalMovement;
+    public float horizontalMovement;
 
     [Header("Lock & Aim")]
     public bool isLocked = false;               // Lock mode state
@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask platformLayer;
     public LayerMask obsticleLayer;
     bool isOnPlatform;
+    bool canShoot;
 
     [Header("Gravity")]
     public float baseGravity = 2f;
@@ -41,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     [Header("Crouching")]
     public Collider2D standingCollider;
     public Collider2D crouchingCollider;
-    bool isCrouching = false;
+    public bool isCrouching = false;
 
     // Update is called once per frame
     void Update()
@@ -90,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (context.performed && playerShooting != null)
         {
-            if (!IsGrounded()) // Player is in mid-air (Jump Attack)
+            if (!IsGrounded() && !canShoot) // Player is in mid-air (Jump Attack)
             {
                 playerShooting.JumpAttack();
                 animator.SetTrigger("jumpAttack"); // Play Jump Attack Animation
@@ -227,16 +228,20 @@ public class PlayerMovement : MonoBehaviour
             if (y > 0 && input.x == 0) // W Pressed (Straight Up)
             {
                 aimDirection = Vector2.up;
+                animator.SetInteger("aimDirectionAnim", 1);
             }
             else if (y > 0 && input.x != 0) // W + A/D (Diagonal Up)
             {
                 aimDirection = new Vector2(x, 1).normalized;
+                animator.SetInteger("aimDirectionAnim", 2);
             }
             else // No vertical input, aim horizontally
             {
                 aimDirection = new Vector2(x, 0);
+                animator.SetInteger("aimDirectionAnim", 0);
             }
         }
+        
     }
     private bool IsGrounded()
     {
@@ -251,7 +256,11 @@ public class PlayerMovement : MonoBehaviour
         if (onGround || onPlatform || onObsticle)
         {
             jumpsRemaining = maxJumps; // Reset jumps when touching ground or platform or an obsticle
-            
+            canShoot = true;
+        }
+        else
+        {
+            canShoot = false;
         }
 
     }
