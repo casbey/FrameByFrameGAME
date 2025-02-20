@@ -5,13 +5,14 @@ public class PlayerShooting : MonoBehaviour
     public GameObject bulletPrefab;
     public Transform firePoint; 
     public float bulletSpeed = 10f;
-    public GameObject jumpAttackHitbox; // Assign in Inspector
+    public GameObject jumpAttack; // Assign in Inspector
     public float jumpAttackDuration = 0.3f; // How long the attack lasts
 
     private bool isFacingRight = true;
 
     public GameObject waterEffect;  // Assign Water Effect GameObject in Unity
     private Animator waterAnimator; // Animator for the water effect
+    private Animator jumpAttackAnimator;
 
     private PlayerMovement playerMovement;
     private CircleCollider2D hitboxCollider;
@@ -33,11 +34,12 @@ public class PlayerShooting : MonoBehaviour
         }
 
         playerMovement = GetComponent<PlayerMovement>();  // Get PlayerMovement reference
+        jumpAttackAnimator = jumpAttack.GetComponent<Animator>();
 
-        if (jumpAttackHitbox)
+        if (jumpAttack)
         {
-            hitboxCollider = jumpAttackHitbox.GetComponent<CircleCollider2D>();
-            jumpAttackHitbox.SetActive(false); // Ensure it's disabled at start
+            hitboxCollider = jumpAttack.GetComponent<CircleCollider2D>();
+            jumpAttack.SetActive(false); // Ensure it's disabled at start
         }
     }
     void Update()
@@ -115,18 +117,47 @@ public class PlayerShooting : MonoBehaviour
 
         Debug.Log("Jump Melee Attack Executed!");
 
-        // Enable the hitbox for a short duration
-        jumpAttackHitbox.SetActive(true);
-        hitboxCollider.enabled = true;
-
-        // Disable after a short delay
-        Invoke("DisableJumpAttackHitbox", jumpAttackDuration);
-    }
-    private void DisableJumpAttackHitbox()
-    {
-        if (jumpAttackHitbox)
+        // Make sure JumpAttack is active before playing animation
+        if (jumpAttack != null && hitboxCollider != null)
         {
-            jumpAttackHitbox.SetActive(false);
+            jumpAttack.SetActive(true);  // Activate JumpAttack GameObject
+            hitboxCollider.enabled = true; // Enable Hitbox Collider
+        }
+
+        // Reset Animator State to force play
+        jumpAttackAnimator.Rebind();
+        jumpAttackAnimator.Update(0);
+
+        // Play the jump attack animation
+        jumpAttackAnimator.SetTrigger("jumpAttack");
+
+        // Deal damage
+        DealJumpAttackDamage();
+    }
+    void DealJumpAttackDamage()
+    {
+        // Define attack radius
+        float attackRadius = hitboxCollider.radius; // Adjust based on your sprite size
+
+        // Get all colliders in the attack radius
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(jumpAttack.transform.position, attackRadius);
+
+        foreach (Collider2D enemy in hitEnemies)
+        {
+            if (enemy.CompareTag("Enemy")) // Ensure we only hit enemies
+            {
+                Debug.Log("Hit enemy: " + enemy.name);
+
+                // Apply damage (Assuming the enemy has a script with a "TakeDamage()" function)
+                enemy.GetComponent<Enemy>().TakeDamage(3);
+            }
+        }
+    }
+    public void DisableJumpAttackHitbox()
+    {
+        if (jumpAttack && hitboxCollider != null)
+        {
+            jumpAttack.SetActive(false);
             hitboxCollider.enabled = false;
             Debug.Log("Jump Melee Attack Disabled!");
         }

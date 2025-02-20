@@ -24,6 +24,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpPower = 10f;
     public int maxJumps = 2;
     int jumpsRemaining;
+    private bool hasJumpAttacked = false; // Tracks if jump attack was used
 
     [Header("GroundCheck")]
     public Transform groundCheckPos;
@@ -91,12 +92,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (context.performed && playerShooting != null)
         {
-            if (!IsGrounded() && !canShoot) // Player is in mid-air (Jump Attack)
+            if (!IsGrounded() && !canShoot && !hasJumpAttacked) // Player is in mid-air (Jump Attack)
             {
                 playerShooting.JumpAttack();
-                animator.SetTrigger("jumpAttack"); // Play Jump Attack Animation
+                hasJumpAttacked = true;
             }
-            else // Normal Shooting on the Ground
+            else if (IsGrounded() && canShoot && !hasJumpAttacked)// Normal Shooting on the Ground
             {
                 playerShooting.Shoot();
             }
@@ -257,6 +258,7 @@ public class PlayerMovement : MonoBehaviour
         {
             jumpsRemaining = maxJumps; // Reset jumps when touching ground or platform or an obsticle
             canShoot = true;
+            hasJumpAttacked = false;
         }
         else
         {
